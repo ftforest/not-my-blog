@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.App {
+  text-align: center;
+  height: 100vh;
+}
+
+h1 {
+  font-size: 40px;
+}
+
+input, button {
+  outline: none;
+  border: none;
+}
+
+button {
+  background: none;
+  cursor: pointer;
+}
+
