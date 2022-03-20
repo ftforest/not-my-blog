@@ -4,3 +4,11 @@
   align-items: center;
   width: 100%;
 }
+
+.showAddFormBtn {
+  border-radius: 8px;
+  padding: 3px 14px;
+  font-size: 20px;
+  background-color: #333;
+  color: white;
+}

@@ -1,70 +1,75 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { PostsHeader } from './PostsHeader/PostsHeader';
-import postImage from '../../../assets/images/postImage.jpg';
 import './Posts.css';
 import { Post } from './Post/Post';
+import { POSTS } from '../../../utils/constants';
+import { setPostsToLocalStorage } from '../../../utils/helpers';
+import { EditForm } from './EditForm/EditForm';
 
 export const Posts = () => {
+  const [blogPosts, setBlogPosts] = useState(
+    JSON.parse(localStorage.getItem('blogPosts')) || POSTS
+  );
+
+  const likePost = (pos) => {
+    const updatedPosts = [...blogPosts];
+
+    updatedPosts[pos].liked = !updatedPosts[pos].liked;
+
+    setPostsToLocalStorage(updatedPosts);
+    setBlogPosts(updatedPosts);
+  };
+
+  const deletePost = (postId) => {
+    const isDelete = window.confirm('Удалить пост?');
+
+    if (isDelete) {
+      const updatedPosts = blogPosts.filter((post) => {
+        return post.id !== postId;
+      });
+
+      setPostsToLocalStorage(updatedPosts);
+      setBlogPosts(updatedPosts);
+    }
+  };
+
+  const [selectedPost, setSelectedPost] = useState({});
+  const [showEditForm, setShowEditForm] = useState(false);
+
+  const selectPost = (pos) => {
+    setSelectedPost(blogPosts[pos]);
+    setShowEditForm(true);
+  };
 
   return (
     <div className='postsWrapper'>
-      <PostsHeader />
+      <PostsHeader setBlogPosts={setBlogPosts} blogPosts={blogPosts} />
 
       <section className='posts'>
-        <Post
-          title='Post 1'
-          description='
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Quis beatae temporibus ad omnis? Quod delen
-          '
-          liked
-        />
-        <Post
-          title='Post 2'
-          description='
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Quis beatae temporibus ad omnis? Quod deleniti nostrum aut enim provident 
-            officiis consequatur quos non facilis eum? Similique porro aut rerum architecto!
-          '
-          image={postImage}
-        />
-        <Post
-          title='Post 3'
-          description='
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Quis beatae temporibus ad omnis? 
-          '
-          liked
-          image={postImage}
-        />
-        <Post
-          title='Post 4'
-          description='
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Quis beatae temporibus ad omnis? Quod deleniti nostrum aut enim provident 
-            officiis consequatur quos non facilis eum? Similique porro aut rerum architecto!
-          '
-          liked
-        />
-        <Post
-          title='Post 5'
-          description='
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Quis beatae temporibus ad omnis? Qu
-          '
-          liked
-          image={postImage}
-        />
-        <Post
-          title='Post 6'
-          description='
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-            Quis beatae temporibus ad omnis? Quod deleniti nostrum aut enim provident 
-            officiis consequatur quos non facilis eum? Similique porro aut rerum architecto!
-          '
-          image={postImage}
-        />
+        {blogPosts.map((post, pos) => {
+          return (
+            <Post
+              title={post.title}
+              description={post.description}
+              liked={post.liked}
+              image={post.image}
+              likePost={() => likePost(pos)}
+              deletePost={() => deletePost(post.id)}
+              selectPost={() => selectPost(pos)}
+              key={post.id}
+            />
+          );
+        })}
       </section>
+
+      {showEditForm && (
+        <EditForm
+          selectedPost={selectedPost}
+          setShowEditForm={setShowEditForm}
+          setBlogPosts={setBlogPosts}
+          blogPosts={blogPosts}
+        />
+      )}
     </div>
   );
 };

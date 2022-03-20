@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import imagePlaceholder from '../../../../assets/images/placeholder.png';
 import { ReactComponent as HeartIcon } from '../../../../assets/images/heart.svg';
+import { ReactComponent as TrashIcon } from '../../../../assets/images/trash.svg';
+import { ReactComponent as PenIcon } from '../../../../assets/images/pen.svg';
 
 import './Post.css';
 
@@ -10,12 +12,12 @@ export const Post = ({
   description,
   liked = false,
   image = imagePlaceholder,
+  likePost,
+  deletePost,
+  selectPost
 }) => {
-  const [isLiked, setIsLiked] = useState(liked);
 
-  const customFilling = isLiked ? 'crimson' : 'black';
-
-  const like = () => setIsLiked(!isLiked);
+  const customFilling = liked ? 'crimson' : 'black';
 
   const finalDescription = (
     <p>
@@ -35,9 +37,17 @@ export const Post = ({
       <img src={image} alt='post' />
       <h2>{title}</h2>
       {finalDescription}
-      <button onClick={like} className='likeBtn'>
-        <HeartIcon fill={customFilling} />
-      </button>
+      <div className="actions">
+        <button onClick={likePost} className='likeBtn'>
+          <HeartIcon fill={customFilling} />
+        </button>
+        <button onClick={deletePost} className='deleteBtn'>
+          <TrashIcon />
+        </button>
+        <button onClick={selectPost} className='selectBtn'>
+          <PenIcon />
+        </button>
+      </div>
     </div>
   );
 };
