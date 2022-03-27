@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './EditForm.css';
 import { ReactComponent as CloseIcon } from '../../../../assets/images/close.svg';
-import { setPostsToLocalStorage } from '../../../../utils/helpers';
+import { POSTS_URL } from '../../../../utils/constants';
 
 export const EditForm = ({
   setShowEditForm,
@@ -29,14 +29,23 @@ export const EditForm = ({
       description: postDesc,
     };
 
-    const updatedPosts = blogPosts.map((post) => {
-      if (post.id === updatedPost.id) return updatedPost;
-      return post;
-    });
-
-    setBlogPosts(updatedPosts);
-    setPostsToLocalStorage(updatedPosts);
-    setShowEditForm(false);
+    fetch(POSTS_URL + selectedPost.id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedPost),
+    })
+      .then(res => res.json())
+      .then(updatedPostFromServer => {
+        const updatedPosts = blogPosts.map((post) => {
+          if (post.id === updatedPostFromServer.id) return updatedPostFromServer;
+          return post;
+        });
+        setBlogPosts(updatedPosts)
+        setShowEditForm(false);
+      })
+      .catch((error) => console.log(error))
   };
 
   return (
