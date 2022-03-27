@@ -1,4 +1,4 @@
-import postImage from '../assets/images/postImage.jpg'
+import postImage from '../assets/images/postImage.jpg';
 
 export const POSTS = [
   {
@@ -22,4 +22,6 @@ export const POSTS = [
     liked: false,
   },
 ];
+
+export const POSTS_URL = 'https://5fb3db44b6601200168f7fba.mockapi.io/api/posts/';
 

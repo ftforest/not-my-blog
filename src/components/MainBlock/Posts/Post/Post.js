@@ -11,7 +11,7 @@ export const Post = ({
   title,
   description,
   liked = false,
-  image = imagePlaceholder,
+  thumbnail = imagePlaceholder,
   likePost,
   deletePost,
   selectPost
@@ -34,7 +34,7 @@ export const Post = ({
 
   return (
     <div className='post'>
-      <img src={image} alt='post' />
+      <img src={thumbnail} alt='post' />
       <h2>{title}</h2>
       {finalDescription}
       <div className="actions">

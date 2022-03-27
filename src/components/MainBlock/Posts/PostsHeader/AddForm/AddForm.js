@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './AddForm.css';
 import { ReactComponent as CloseIcon } from '../../../../../assets/images/close.svg';
-import { setPostsToLocalStorage } from '../../../../../utils/helpers';
-import postImage from '../../../../../assets/images/postImage.jpg'
+import { POSTS_URL } from '../../../../../utils/constants';
 
 export const AddForm = ({ setShowAddForm, blogPosts, setBlogPosts }) => {
 
@@ -21,18 +20,25 @@ export const AddForm = ({ setShowAddForm, blogPosts, setBlogPosts }) => {
     e.preventDefault();
 
     const newPost = {
-      id: blogPosts.length + 1,
       title: postTitle,
       description: postDesc,
       liked: false,
-      image: postImage,
+      thumbnail: blogPosts[0].thumbnail,
     }
 
-    const updatedPosts = [...blogPosts, newPost];
-
-    setBlogPosts(updatedPosts);
-    setPostsToLocalStorage(updatedPosts);
-    setShowAddForm(false);
+    fetch(POSTS_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newPost)
+    })
+      .then(res => res.json())
+      .then(newPostFromServer => {
+        setBlogPosts([...blogPosts, newPostFromServer]);
+        setShowAddForm(false);
+      })
+      .catch(error => console.log(error))
   }
 
   return (
