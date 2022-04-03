@@ -4,11 +4,16 @@ import './Posts.css';
 import { Post } from './Post/Post';
 import { POSTS_URL } from '../../../utils/constants';
 import { EditForm } from './EditForm/EditForm';
-import { useFetchPosts } from '../../../utils/hooks';
 
-export const Posts = () => {
-
-  const { blogPosts, setBlogPosts, isLoading, error } = useFetchPosts(POSTS_URL);
+export const Posts = ({
+  title,
+  blogPosts,
+  isLoading,
+  setBlogPosts,
+  error,
+  isLikedPosts = false,
+}) => {
+  const likedPosts = blogPosts.filter((post) => post.liked);
 
   const likePost = (pos) => {
     const updatedPosts = [...blogPosts];
@@ -18,16 +23,16 @@ export const Posts = () => {
     fetch(POSTS_URL + updatedPosts[pos].id, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updatedPosts[pos])
+      body: JSON.stringify(updatedPosts[pos]),
     })
       .then((res) => res.json())
       .then((updatedPostFromServer) => {
         updatedPosts[pos] = updatedPostFromServer;
         setBlogPosts(updatedPosts);
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(error));
   };
 
   const deletePost = (postId) => {
@@ -35,9 +40,11 @@ export const Posts = () => {
 
     if (isDelete) {
       fetch(POSTS_URL + postId, { method: 'DELETE' })
-        .then(() => setBlogPosts(blogPosts.filter(post => post.id !== postId)))
-        .catch((error) => console.log(error))
-    };
+        .then(() =>
+          setBlogPosts(blogPosts.filter((post) => post.id !== postId))
+        )
+        .catch((error) => console.log(error));
+    }
   };
 
   const [selectedPost, setSelectedPost] = useState({});
@@ -54,10 +61,15 @@ export const Posts = () => {
 
   return (
     <div className='postsWrapper'>
-      <PostsHeader setBlogPosts={setBlogPosts} blogPosts={blogPosts} />
+      <PostsHeader
+        title={title}
+        isLikedPosts={isLikedPosts}
+        setBlogPosts={setBlogPosts}
+        blogPosts={blogPosts}
+      />
 
       <section className='posts'>
-        {blogPosts.map((post, pos) => {
+        {(isLikedPosts ? likedPosts : blogPosts).map((post, pos) => {
           return (
             <Post
               title={post.title}
