@@ -6,7 +6,7 @@ import { useFetchPosts } from '../../utils/hooks';
 import { POSTS_URL } from '../../utils/constants';
 import { BlogPage } from '../../pages/BlogPage/BlogPage';
 
-export const MainBlock = ({ setIsLoggedIn, isLoggedIn }) => {
+export const MainBlock = ({ setIsLoggedIn }) => {
   const postsData = useFetchPosts(POSTS_URL);
 
   return (
