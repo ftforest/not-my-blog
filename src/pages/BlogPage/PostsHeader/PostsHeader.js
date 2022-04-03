@@ -3,15 +3,18 @@ import { SearchForm } from './SearchForm/SearchForm';
 import './PostHeader.css';
 import { AddForm } from './AddForm/AddForm';
 
-export const PostsHeader = ({ blogPosts, setBlogPosts }) => {
+export const PostsHeader = ({ title, blogPosts, setBlogPosts, isLikedPosts }) => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   return (
     <section className='postsHeader'>
-      <h1>Posts</h1>
-      <button onClick={() => setShowAddForm(true)} className='showAddFormBtn'>
-        Создать пост
-      </button>
+      <h1>{title}</h1>
+      {!isLikedPosts && (
+        <button onClick={() => setShowAddForm(true)} className='showAddFormBtn'>
+          Создать пост
+        </button>
+      )}
+
       <SearchForm />
 
       {showAddForm && (

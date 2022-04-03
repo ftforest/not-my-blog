@@ -1,22 +1,22 @@
 import { useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import './LoginPage.css';
 
 export const LoginPage = ({ setIsLoggedIn }) => {
+
   const loginRef = useRef();
   const passwordRef = useRef();
 
-  const handleSubmit = () => {
+  const history = useHistory();
 
-    const userData = {
-      login: loginRef.current.value,
-      password: passwordRef.current.value
-    }
+  const handleSubmit = (e) => {
 
-    console.log(userData);
+    e.preventDefault();
 
     localStorage.setItem('isLoggedIn', true)
 
     setIsLoggedIn(true);
+    history.push('/');
   }
 
   return (
