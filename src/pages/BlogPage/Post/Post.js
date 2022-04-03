@@ -1,9 +1,9 @@
 import React from 'react';
 
-import imagePlaceholder from '../../../../assets/images/placeholder.png';
-import { ReactComponent as HeartIcon } from '../../../../assets/images/heart.svg';
-import { ReactComponent as TrashIcon } from '../../../../assets/images/trash.svg';
-import { ReactComponent as PenIcon } from '../../../../assets/images/pen.svg';
+import imagePlaceholder from '../../../assets/images/placeholder.png';
+import { ReactComponent as HeartIcon } from '../../../assets/images/heart.svg';
+import { ReactComponent as TrashIcon } from '../../../assets/images/trash.svg';
+import { ReactComponent as PenIcon } from '../../../assets/images/pen.svg';
 
 import './Post.css';
 

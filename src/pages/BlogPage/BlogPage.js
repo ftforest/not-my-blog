@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { PostsHeader } from './PostsHeader/PostsHeader';
-import './Posts.css';
+import './BlogPage.css';
 import { Post } from './Post/Post';
-import { POSTS_URL } from '../../../utils/constants';
 import { EditForm } from './EditForm/EditForm';
+import { POSTS_URL } from '../../utils/constants';
+import { PostsHeader } from './PostsHeader/PostsHeader';
 
-export const Posts = ({
+export const BlogPage = ({
   title,
   blogPosts,
   isLoading,

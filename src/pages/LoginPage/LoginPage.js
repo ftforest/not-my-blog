@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import { useLocation } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import './LoginPage.css';
 

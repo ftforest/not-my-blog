@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './EditForm.css';
-import { ReactComponent as CloseIcon } from '../../../../assets/images/close.svg';
-import { POSTS_URL } from '../../../../utils/constants';
+import { ReactComponent as CloseIcon } from '../../../assets/images/close.svg';
+import { POSTS_URL } from '../../../utils/constants';
 
 export const EditForm = ({
   setShowEditForm,
