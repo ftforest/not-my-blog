@@ -72,10 +72,7 @@ export const BlogPage = ({
         {(isLikedPosts ? likedPosts : blogPosts).map((post, pos) => {
           return (
             <Post
-              title={post.title}
-              description={post.description}
-              liked={post.liked}
-              thumbnail={post.thumbnail}
+              {...post}
               likePost={() => likePost(pos)}
               deletePost={() => deletePost(post.id)}
               selectPost={() => selectPost(post)}

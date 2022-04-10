@@ -6,8 +6,10 @@ import { ReactComponent as TrashIcon } from '../../../assets/images/trash.svg';
 import { ReactComponent as PenIcon } from '../../../assets/images/pen.svg';
 
 import './Post.css';
+import { Link } from 'react-router-dom';
 
 export const Post = ({
+  id,
   title,
   description,
   liked = false,
@@ -24,7 +26,7 @@ export const Post = ({
       {description.length > 100 ? (
         <>
           {description.slice(0, 101)}...
-          <a href='/'>Подробнее</a>
+          <Link to={`/blog/${id}`}>Подробнее</Link>
         </>
       ) : (
         description
