@@ -5,9 +5,6 @@ import { Route } from 'react-router-dom';
 import { useFetchPosts } from '../../utils/hooks';
 import { POSTS_URL } from '../../utils/constants';
 import { BlogPage } from '../../pages/BlogPage/BlogPage';
-import { NoMatch } from '../../pages/NoMatch/NoMatch';
-import { Switch } from 'react-router-dom';
-import { Redirect } from 'react-router-dom';
 
 export const MainBlock = ({ setIsLoggedIn }) => {
   const postsData = useFetchPosts(POSTS_URL);
