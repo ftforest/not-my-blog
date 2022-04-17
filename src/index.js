@@ -1,13 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import 'antd/dist/antd.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { store } from './store';
+import { ConfigProvider } from 'antd';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <Provider store={store}>
+        <ConfigProvider locale={'ru_RU'}>
+          <App />
+        </ConfigProvider>
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

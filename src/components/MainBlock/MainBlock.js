@@ -7,19 +7,19 @@ import { Switch } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import { BlogPostPage } from '../../pages/BlogPostPage/BlogPostPage';
 
-export const MainBlock = ({ setIsLoggedIn, postsData }) => {
+export const MainBlock = ({ postsData }) => {
 
   return (
     <>
-      <SideBar setIsLoggedIn={setIsLoggedIn} />
+      <SideBar />
       <main className='mainBlock'>
         <Switch>
           <Route exact path='/blog'>
             <BlogPage title="Posts" {...postsData} />
           </Route>
-          <Route exact path='/favourite'>
+          {/* <Route exact path='/favourite'>
             <BlogPage title="Favourite posts" {...postsData} isLikedPosts />
-          </Route>
+          </Route> */}
           <Route path="/blog/:postId">
             <BlogPostPage setBlogPosts={postsData.setBlogPosts} />
           </Route>

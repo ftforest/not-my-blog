@@ -1,50 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './BlogPage.css';
+import { Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Post } from './Post/Post';
-import { EditForm } from './EditForm/EditForm';
-import { POSTS_URL } from '../../utils/constants';
 import { PostsHeader } from './PostsHeader/PostsHeader';
+import {
+  deletePost,
+  editPost,
+  fetchPosts,
+  selectPostsData,
+} from '../../store/slices/posts';
+import { useDispatch, useSelector } from 'react-redux';
+import { EditForm } from '../../components/EditForm/EditForm';
 
-export const BlogPage = ({
-  title,
-  blogPosts,
-  isLoading,
-  setBlogPosts,
-  error,
-  isLikedPosts = false,
-}) => {
-  const likedPosts = blogPosts.filter((post) => post.liked);
+const { confirm } = Modal;
 
-  const likePost = (pos) => {
-    const updatedPosts = [...blogPosts];
+export const BlogPage = () => {
 
-    updatedPosts[pos].liked = !updatedPosts[pos].liked;
+  const { list: posts, isLoading, error } = useSelector(selectPostsData);
+  const dispatch = useDispatch();
 
-    fetch(POSTS_URL + updatedPosts[pos].id, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedPosts[pos]),
-    })
-      .then((res) => res.json())
-      .then((updatedPostFromServer) => {
-        updatedPosts[pos] = updatedPostFromServer;
-        setBlogPosts(updatedPosts);
-      })
-      .catch((error) => console.log(error));
+  useEffect(() => {
+    dispatch(fetchPosts());
+  }, [dispatch]);
+
+  const handleLikePost = (index) => {
+    const updatedPosts = [...posts];
+    updatedPosts[index] = {
+      ...updatedPosts[index],
+      liked: !updatedPosts[index].liked,
+    };
+
+    dispatch(editPost(updatedPosts[index]));
   };
 
-  const deletePost = (postId) => {
-    const isDelete = window.confirm('Удалить пост?');
+  const handleDeletePost = (postId) => {
 
-    if (isDelete) {
-      fetch(POSTS_URL + postId, { method: 'DELETE' })
-        .then(() =>
-          setBlogPosts(blogPosts.filter((post) => post.id !== postId))
-        )
-        .catch((error) => console.log(error));
-    }
+    confirm({
+      title: 'Удалить пост?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Это необратимый процесс',
+      okText: 'Да',
+      okType: 'danger',
+      cancelText: 'Отмена',
+      onOk() {
+        dispatch(deletePost(postId));
+      }
+    });
+
   };
 
   const [selectedPost, setSelectedPost] = useState({});
@@ -62,19 +65,18 @@ export const BlogPage = ({
   return (
     <div className='postsWrapper'>
       <PostsHeader
-        title={title}
-        isLikedPosts={isLikedPosts}
-        setBlogPosts={setBlogPosts}
-        blogPosts={blogPosts}
+        title={'Posts'}
+        isLikedPosts={false}
+        blogPosts={posts}
       />
 
       <section className='posts'>
-        {(isLikedPosts ? likedPosts : blogPosts).map((post, pos) => {
+        {posts.map((post, pos) => {
           return (
             <Post
               {...post}
-              likePost={() => likePost(pos)}
-              deletePost={() => deletePost(post.id)}
+              likePost={() => handleLikePost(pos)}
+              deletePost={() => handleDeletePost(post.id)}
               selectPost={() => selectPost(post)}
               key={post.id}
             />
@@ -86,8 +88,6 @@ export const BlogPage = ({
         <EditForm
           selectedPost={selectedPost}
           setShowEditForm={setShowEditForm}
-          setBlogPosts={setBlogPosts}
-          blogPosts={blogPosts}
         />
       )}
     </div>
