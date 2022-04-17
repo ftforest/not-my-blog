@@ -24,23 +24,6 @@ export const BlogPage = () => {
     dispatch(fetchPosts());
   }, [dispatch]);
 
-  function showDeleteConfirm() {
-    confirm({
-      title: 'Are you sure delete this task?',
-      icon: <ExclamationCircleOutlined />,
-      content: 'Some descriptions',
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      onOk() {
-        console.log('OK');
-      },
-      onCancel() {
-        console.log('Cancel');
-      },
-    });
-  }
-
   const handleLikePost = (index) => {
     const updatedPosts = [...posts];
     updatedPosts[index] = {
