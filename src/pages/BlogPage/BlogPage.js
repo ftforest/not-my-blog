@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './BlogPage.css';
+import { Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Post } from './Post/Post';
 import { PostsHeader } from './PostsHeader/PostsHeader';
 import {
@@ -11,8 +13,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { EditForm } from '../../components/EditForm/EditForm';
 
+const { confirm } = Modal;
+
 export const BlogPage = () => {
-  // const likedPosts = blogPosts.filter((post) => post.liked);
 
   const { list: posts, isLoading, error } = useSelector(selectPostsData);
   const dispatch = useDispatch();
@@ -20,6 +23,23 @@ export const BlogPage = () => {
   useEffect(() => {
     dispatch(fetchPosts());
   }, [dispatch]);
+
+  function showDeleteConfirm() {
+    confirm({
+      title: 'Are you sure delete this task?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Some descriptions',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        console.log('OK');
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
 
   const handleLikePost = (index) => {
     const updatedPosts = [...posts];
@@ -32,7 +52,19 @@ export const BlogPage = () => {
   };
 
   const handleDeletePost = (postId) => {
-    dispatch(deletePost(postId));
+
+    confirm({
+      title: 'Удалить пост?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Это необратимый процесс',
+      okText: 'Да',
+      okType: 'danger',
+      cancelText: 'Отмена',
+      onOk() {
+        dispatch(deletePost(postId));
+      }
+    });
+
   };
 
   const [selectedPost, setSelectedPost] = useState({});

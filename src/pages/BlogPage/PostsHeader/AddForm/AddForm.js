@@ -26,7 +26,7 @@ export const AddForm = ({ setShowAddForm, blogPosts }) => {
       title: postTitle,
       description: postDesc,
       liked: false,
-      thumbnail: blogPosts[0].thumbnail,
+      thumbnail: blogPosts[0]?.thumbnail || 'https://avtoteatr74.ru/assets/img/no-image.svg',
     }
     dispatch(createNewPost(newPost))
       .finally(() => setShowAddForm(false));
