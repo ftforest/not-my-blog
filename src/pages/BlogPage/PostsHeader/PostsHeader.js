@@ -3,7 +3,7 @@ import { SearchForm } from './SearchForm/SearchForm';
 import './PostHeader.css';
 import { AddForm } from './AddForm/AddForm';
 
-export const PostsHeader = ({ title, blogPosts, setBlogPosts, isLikedPosts }) => {
+export const PostsHeader = ({ title, blogPosts, isLikedPosts }) => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   return (
@@ -19,7 +19,6 @@ export const PostsHeader = ({ title, blogPosts, setBlogPosts, isLikedPosts }) =>
 
       {showAddForm && (
         <AddForm
-          setBlogPosts={setBlogPosts}
           blogPosts={blogPosts}
           setShowAddForm={setShowAddForm}
         />

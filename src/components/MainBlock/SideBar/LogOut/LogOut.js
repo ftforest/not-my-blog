@@ -1,15 +1,16 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ReactComponent as ArrowLeftIcon } from '../../../../assets/images/left-arrow.svg';
 import './LogOut.css';
 
-export const LogOut = ({ setIsLoggedIn }) => {
-
+export const LogOut = () => {
   const history = useHistory();
 
+  const dispatch = useDispatch();
+
   const logOut = () => {
-    localStorage.removeItem('isLoggedIn');
-    setIsLoggedIn(false);
+    dispatch(logOut());
     history.push('/login');
   }
 

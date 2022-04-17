@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import './AddForm.css';
 import { ReactComponent as CloseIcon } from '../../../../assets/images/close.svg';
-import { POSTS_URL } from '../../../../utils/constants';
+import { createNewPost } from '../../../../store/slices/posts';
+import { useDispatch } from 'react-redux';
 
-export const AddForm = ({ setShowAddForm, blogPosts, setBlogPosts }) => {
+export const AddForm = ({ setShowAddForm, blogPosts }) => {
 
   const [postTitle, setPostTitle] = useState('');
   const [postDesc, setPostDesc] = useState('');
@@ -16,7 +17,9 @@ export const AddForm = ({ setShowAddForm, blogPosts, setBlogPosts }) => {
     setPostDesc(e.target.value)
   }
 
-  const createPost = (e) => {
+  const dispatch = useDispatch();
+
+  const handleCreatePost = (e) => {
     e.preventDefault();
 
     const newPost = {
@@ -25,25 +28,13 @@ export const AddForm = ({ setShowAddForm, blogPosts, setBlogPosts }) => {
       liked: false,
       thumbnail: blogPosts[0].thumbnail,
     }
-
-    fetch(POSTS_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newPost)
-    })
-      .then(res => res.json())
-      .then(newPostFromServer => {
-        setBlogPosts([...blogPosts, newPostFromServer]);
-        setShowAddForm(false);
-      })
-      .catch(error => console.log(error))
+    dispatch(createNewPost(newPost))
+      .finally(() => setShowAddForm(false));
   }
 
   return (
     <>
-      <form className='addPostForm' onSubmit={createPost}>
+      <form className='addPostForm' onSubmit={handleCreatePost}>
         <button className='hideBtn' onClick={() => setShowAddForm(false)}>
           <CloseIcon />
         </button>

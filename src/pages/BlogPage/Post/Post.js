@@ -26,11 +26,12 @@ export const Post = ({
       {description.length > 100 ? (
         <>
           {description.slice(0, 101)}...
-          <Link to={`/blog/${id}`}>Подробнее</Link>
         </>
       ) : (
         description
       )}
+      &nbsp;
+      <Link to={`/blog/${id}`}>Подробнее</Link>
     </p>
   );
 

@@ -7,15 +7,21 @@ import { ReactComponent as HeartIcon } from '../../assets/images/heart.svg';
 import { ReactComponent as TrashIcon } from '../../assets/images/trash.svg';
 import { ReactComponent as PenIcon } from '../../assets/images/pen.svg';
 import { useHistory } from 'react-router-dom';
-import { EditForm } from './EditForm/EditForm';
+import { useDispatch } from 'react-redux';
+import { deletePost, editPost } from '../../store/slices/posts';
+import { EditForm } from '../../components/EditForm/EditForm';
 
 export const BlogPostPage = ({ setBlogPosts }) => {
-
   const { postId } = useParams();
 
   const history = useHistory();
 
-  const { blogPost, setBlogPost, isLoading, error } = useGetSinglePost(POSTS_URL, postId);
+  const dispatch = useDispatch();
+
+  const { blogPost, setBlogPost, isLoading, error } = useGetSinglePost(
+    POSTS_URL,
+    postId
+  );
 
   const [showEditForm, setShowEditForm] = useState(false);
 
@@ -25,42 +31,19 @@ export const BlogPostPage = ({ setBlogPosts }) => {
 
   if (error) return <h1>{error.message}</h1>;
 
-  const likePost = () => {
-    const updatedPost = {...blogPost, liked: !blogPost.liked};
+  const handleLikePost = () => {
+    const updatedPost = { ...blogPost, liked: !blogPost.liked };
 
-    fetch(POSTS_URL + postId, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedPost),
-    })
-      .then((res) => res.json())
-      .then((updatedPostFromServer) => {
-        setBlogPost(updatedPostFromServer);
-        setBlogPosts((blogPosts) => {
-          return blogPosts.map(post => {
-            if (post.id === updatedPostFromServer.id) {
-              return updatedPostFromServer
-            }
-
-            return post
-          })
-        })
-      })
-      .catch((error) => console.log(error));
+    dispatch(editPost(updatedPost)).then(() => {
+      setBlogPost(updatedPost);
+    });
   };
 
-  const deletePost = () => {
+  const handleDeletePost = () => {
     const isDelete = window.confirm('Удалить пост?');
 
     if (isDelete) {
-      fetch(POSTS_URL + postId, { method: 'DELETE' })
-        .then(() => {
-          setBlogPosts((blogPosts) => blogPosts.filter((post) => post.id !== postId))
-          history.goBack();
-        })
-        .catch((error) => console.log(error));
+      dispatch(deletePost(postId)).then(() => history.goBack());
     }
   };
 
@@ -74,10 +57,10 @@ export const BlogPostPage = ({ setBlogPosts }) => {
       <h2>{title}</h2>
       {description}
       <div className='actions'>
-        <button onClick={likePost} className='likeBtn'>
+        <button onClick={handleLikePost} className='likeBtn'>
           <HeartIcon fill={customFilling} />
         </button>
-        <button onClick={deletePost} className='deleteBtn'>
+        <button onClick={handleDeletePost} className='deleteBtn'>
           <TrashIcon />
         </button>
         <button onClick={handleEditFormShow} className='selectBtn'>
@@ -86,12 +69,7 @@ export const BlogPostPage = ({ setBlogPosts }) => {
       </div>
 
       {showEditForm && (
-        <EditForm
-          setShowEditForm={setShowEditForm}
-          setBlogPost={setBlogPost}
-          blogPost={blogPost}
-          setBlogPosts={setBlogPosts}
-        />
+        <EditForm setShowEditForm={setShowEditForm} selectedPost={blogPost} />
       )}
     </div>
   );
